@@ -111,6 +111,27 @@ src/
 
 Keep the structure flat. Create `components/` as needed.
 
+## TypeScript Rules
+
+This project uses strict TypeScript settings. Pay attention to:
+
+- **`verbatimModuleSyntax` is enabled.** You MUST use `import type` for 
+  type-only imports. Use `import { type Foo, bar }` for mixed imports.
+- **`noUnusedLocals` and `noUnusedParameters` are enabled.** No dead code. 
+  Prefix intentionally unused parameters with `_`.
+- Always run `npm run build` (not just `vite build`) to verify the code 
+  compiles. The build command runs `tsc -b` first.
+
+## Scope Limits
+
+- Maximum 6 component files in `src/components/`.
+- No `hooks/` or `utils/` directories — put helpers in the component 
+  files or a single `src/lib.ts` if needed.
+- No binary assets (images, sounds, fonts). Use emoji, CSS, or inline 
+  SVG for visual elements.
+- If PLAN.md exceeds these limits, simplify to fit. Functionality over 
+  complexity.
+
 ## Do NOT
 
 - Install additional CSS or UI libraries (no MUI, Chakra, shadcn, styled-components).
