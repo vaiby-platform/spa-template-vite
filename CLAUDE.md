@@ -7,7 +7,9 @@ Build a single-page application from the PLAN.md specification. The stack is alr
 - React 19 + TypeScript
 - Vite 7
 - Tailwind CSS v4 (via `@tailwindcss/vite` plugin — already configured)
-- Headless UI (`@headlessui/react`) for interactive components
+- Radix UI primitives + custom components in `src/components/ui/`
+- `lucide-react` for icons
+- `class-variance-authority` + `clsx` + `tailwind-merge` for styling utilities
 
 Do not install additional UI libraries, CSS frameworks, or state management packages unless PLAN.md explicitly requires them.
 
@@ -73,19 +75,38 @@ focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500
 - Errors: `text-red-600` with a brief message.
 - Success: `text-green-600` or a brief toast/banner.
 
-## Using Headless UI
+## UI Components (`src/components/ui/`)
 
-Use Headless UI for these interactive patterns instead of building from scratch:
+**Always use the pre-built UI components** instead of building interactive elements from scratch. These are Radix UI primitives wrapped with Tailwind styling. Import from `../../components/ui/<component>` or from the barrel `../../components/ui`.
 
-- **Dialog** — modals and confirmation dialogs
-- **Menu** — dropdown menus
-- **Listbox** — custom select/dropdown
-- **Switch** — toggle switches
-- **Disclosure** — collapsible sections
-- **Popover** — popovers and tooltips
-- **Tabs** — tabbed interfaces
+Available components:
+- **AlertDialog** — confirmation dialogs with required action
+- **Badge** — status indicators (variants: default, secondary, destructive, outline, success, warning, info)
+- **Button** — primary action element (variants: default, destructive, outline, secondary, ghost, link; sizes: default, sm, lg, icon). Supports icons via children.
+- **Card** — content container (Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter)
+- **Checkbox** — boolean toggle input
+- **Dialog** — modal windows
+- **DropdownMenu** — click-triggered menu with items, checkboxes, radio items, separators, sub-menus
+- **Label** — accessible form labels
+- **Select** — dropdown selection with search-friendly items
+- **Separator** — visual divider (horizontal/vertical)
+- **Switch** — on/off toggle
+- **Tabs** — tabbed content panels (Tabs, TabsList, TabsTrigger, TabsContent)
 
-Import from `@headlessui/react`. These components are unstyled — apply Tailwind classes directly. Use `Transition` from Headless UI for enter/leave animations.
+For any interactive pattern not covered above (e.g. accordion, tooltip, popover), build it with plain Tailwind + HTML. Keep it simple.
+
+### Customizing components
+
+These components accept a `className` prop — pass additional Tailwind classes to override or extend the default styling. Use the `cn()` helper from `src/lib/utils` to merge classes cleanly:
+
+```tsx
+import { Button } from "../components/ui/button";
+import { cn } from "../lib/utils";
+
+<Button className="bg-indigo-600 hover:bg-indigo-700">Custom</Button>
+```
+
+**Do NOT build custom interactive components when a UI component already exists.** For example, use `<Dialog>` for modals, `<Select>` for dropdowns, `<AlertDialog>` for confirmations.
 
 ## Code Conventions
 
@@ -105,11 +126,14 @@ src/
   App.tsx           — root component
   App.css           — empty, available if custom CSS is needed
   index.css         — Tailwind import (do not modify)
-  components/       — UI components
+  lib/
+    utils.ts        — cn() helper for merging Tailwind classes
+  components/
+    ui/             — Radix UI primitives with Tailwind styling (do not modify)
   assets/           — static assets
 ```
 
-Keep the structure flat. Create `components/` as needed.
+Keep the structure flat. Add page-level components directly in `components/`. Do not modify files in `components/ui/` — customize by passing `className` props.
 
 ## TypeScript Rules
 
@@ -134,7 +158,7 @@ This project uses strict TypeScript settings. Pay attention to:
 
 ## Do NOT
 
-- Install additional CSS or UI libraries (no MUI, Chakra, shadcn, styled-components).
+- Install additional CSS or UI libraries (no MUI, Chakra, shadcn, styled-components). Use the existing `components/ui/` primitives instead.
 - Add React Router unless PLAN.md requires it.
 - Add Redux, Zustand, or other state libraries unless PLAN.md requires it.
 - Add a backend, API layer, or database.
