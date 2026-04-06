@@ -35,78 +35,42 @@ Simplicity is the top priority. These apps are used by people who are not develo
 - **Generous spacing.** Use Tailwind's spacing scale liberally (`p-4`, `space-y-4`, `gap-6`). Don't crowd elements.
 - **Responsive.** Mobile-first. Use Tailwind responsive prefixes (`sm:`, `md:`, `lg:`).
 
-## UI & Styling with Tailwind
+## UI & Styling
 
-All styling is done with Tailwind utility classes inline. Do not write custom CSS unless absolutely necessary.
+All styling is done with Tailwind utility classes. Do not write custom CSS unless absolutely necessary.
 
-### Layout
-- Use `flex`, `grid`, `gap-*`, and `space-y-*` for layout.
-- Contain page content with `max-w-2xl mx-auto px-4` or similar.
-- Full-height pages: `min-h-screen`.
-
-### Colors & Contrast
-- Use `gray-50` / `white` backgrounds with `gray-900` text for high readability.
-- Primary actions: `bg-blue-600 text-white hover:bg-blue-700` (or similar strong, accessible combo).
-- Secondary/subtle actions: `bg-gray-100 text-gray-700 hover:bg-gray-200`.
-- Destructive actions: `bg-red-600 text-white hover:bg-red-700`.
-- Always ensure strong contrast between text and background.
-
-### Buttons
-```
-rounded-lg px-4 py-2 text-sm font-medium transition-colors
-focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-```
-
-### Inputs
-```
-w-full rounded-lg border border-gray-300 px-3 py-2 text-sm
-placeholder:text-gray-400
-focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500
-```
-
-### Typography
-- Headings: `text-2xl font-bold text-gray-900` (adjust size per hierarchy).
-- Body: `text-sm text-gray-600` or `text-base text-gray-700`.
-- Use font weight and size for hierarchy — not color alone.
-
-### Feedback
-- Loading: show a spinner or "Loading..." text.
-- Empty states: centered message with muted text (`text-gray-400`).
-- Errors: `text-red-600` with a brief message.
-- Success: `text-green-600` or a brief toast/banner.
+- Use `flex`, `grid`, `gap-*`, and `space-y-*` for layout. Contain page content with `max-w-2xl mx-auto px-4` or similar.
+- **You have full creative freedom over colors, typography, and visual design.** Choose a cohesive color palette and apply it consistently. Ensure strong contrast between text and backgrounds — readability is non-negotiable.
+- **Responsive.** Mobile-first. Use Tailwind responsive prefixes (`sm:`, `md:`, `lg:`).
 
 ## UI Components (`src/components/ui/`)
 
-**Always use the pre-built UI components** instead of building interactive elements from scratch. These are Radix UI primitives wrapped with Tailwind styling. Import from `../../components/ui/<component>` or from the barrel `../../components/ui`.
+Use the pre-built UI components for interactive elements. They handle accessibility, focus management, keyboard navigation, and portals — you provide the visual styling via `className` props.
+
+**The components ship with minimal, neutral defaults.** You are expected to style them to match your chosen aesthetic. Use the `cn()` helper from `src/lib/utils` to merge classes:
+
+```tsx
+import { Button } from "../components/ui/button";
+<Button className="bg-indigo-600 text-white hover:bg-indigo-700 rounded-full px-6">Save</Button>
+```
 
 Available components:
 - **AlertDialog** — confirmation dialogs with required action
 - **Badge** — status indicators (variants: default, secondary, destructive, outline, success, warning, info)
-- **Button** — primary action element (variants: default, destructive, outline, secondary, ghost, link; sizes: default, sm, lg, icon). Supports icons via children.
+- **Button** — action element (variants: default, destructive, outline, secondary, ghost, link; sizes: default, sm, lg, icon)
 - **Card** — content container (Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter)
 - **Checkbox** — boolean toggle input
 - **Dialog** — modal windows
 - **DropdownMenu** — click-triggered menu with items, checkboxes, radio items, separators, sub-menus
 - **Label** — accessible form labels
-- **Select** — dropdown selection with search-friendly items
+- **Select** — dropdown selection
 - **Separator** — visual divider (horizontal/vertical)
 - **Switch** — on/off toggle
 - **Tabs** — tabbed content panels (Tabs, TabsList, TabsTrigger, TabsContent)
 
-For any interactive pattern not covered above (e.g. accordion, tooltip, popover), build it with plain Tailwind + HTML. Keep it simple.
+For any interactive pattern not covered above, build it with plain Tailwind + HTML.
 
-### Customizing components
-
-These components accept a `className` prop — pass additional Tailwind classes to override or extend the default styling. Use the `cn()` helper from `src/lib/utils` to merge classes cleanly:
-
-```tsx
-import { Button } from "../components/ui/button";
-import { cn } from "../lib/utils";
-
-<Button className="bg-indigo-600 hover:bg-indigo-700">Custom</Button>
-```
-
-**Do NOT build custom interactive components when a UI component already exists.** For example, use `<Dialog>` for modals, `<Select>` for dropdowns, `<AlertDialog>` for confirmations.
+**Do NOT build custom interactive components when a UI component already exists.** Use `<Dialog>` for modals, `<Select>` for dropdowns, `<AlertDialog>` for confirmations, etc.
 
 ## Code Conventions
 
